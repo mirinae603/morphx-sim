@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 816" width="1120" height="816" role="img" aria-labelledby="t d" font-family="Inter,'Segoe UI',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif">
+<title id="t">MorphX system architecture</title>
+<desc id="d">A device process (acquisition loop, SQLite outbox, sync loop, status endpoint) uploads over HTTP to a server process (ingest, SQLite storage, read API, dashboard). A browser polls the status endpoint, the read API and the dashboard. Eight numbered steps show the path of one record.</desc>
+<defs>
+<marker id="m" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0.800L9.2 5L0 9.200z" fill="#9a9a9a"/></marker>
+<marker id="w" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 0.800L9.2 5L0 9.200z" fill="#ffffff"/></marker>
+<marker id="d" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0.800L9.2 5L0 9.200z" fill="#bdbdbd"/></marker>
+<pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1" fill="#171717"/></pattern>
+<linearGradient id="rule" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity=".85"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+<filter id="glow" x="-10%" y="-40%" width="120%" height="180%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="1120" height="816" rx="16" fill="#090909"/><rect width="1120" height="816" rx="16" fill="url(#dots)"/>
+<rect x=".6" y=".6" width="1118.8" height="814.8" rx="16" fill="none" stroke="#262626"/>
+<text x="32" y="54" font-size="17" fill="#ffffff" text-anchor="start" letter-spacing="2.2"><tspan font-weight="700">MORPHX</tspan><tspan>  ·  SYSTEM ARCHITECTURE</tspan></text>
+<text x="32" y="78" font-size="12.5" fill="#8f8f8f" text-anchor="start"><tspan>Two processes, one HTTP link, SQLite on both sides.</tspan></text>
+<rect x="32" y="88" width="220" height="2" fill="url(#rule)"/>
+<line x1="716" y1="52" x2="746" y2="52" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+<text x="756" y="56" font-size="12" fill="#8f8f8f" text-anchor="start"><tspan>upload</tspan></text>
+<line x1="808" y1="52" x2="838" y2="52" stroke="#bdbdbd" stroke-width="2" stroke-dasharray="6 4" stroke-linecap="round"/>
+<text x="848" y="56" font-size="12" fill="#8f8f8f" text-anchor="start"><tspan>reply</tspan></text>
+<line x1="888" y1="52" x2="918" y2="52" stroke="#8f8f8f" stroke-width="2" stroke-dasharray="2 4" stroke-linecap="round"/>
+<text x="928" y="56" font-size="12" fill="#8f8f8f" text-anchor="start"><tspan>read-only polling</tspan></text>
+<rect x="472" y="40" width="176" height="56" rx="10" fill="#101010" stroke="#4a4a4a" stroke-width="1.2"/>
+<text x="560" y="64" font-size="13" fill="#e8e8e8" text-anchor="middle"><tspan font-weight="700">browser</tspan><tspan> · dashboard</tspan></text>
+<text x="560" y="82" font-size="11.5" fill="#8f8f8f" text-anchor="middle"><tspan>polls once a second</tspan></text>
+<rect x="32" y="112" width="432" height="544" rx="14" fill="#0b0b0b" stroke="#2c2c2c" stroke-width="1.2"/>
+<text x="56" y="142" font-size="12" fill="#ffffff" text-anchor="start" letter-spacing="2.4"><tspan font-weight="700">DEVICE</tspan></text>
+<text x="131.04" y="142" font-size="12.5" fill="#e8e8e8" text-anchor="start"><tspan font-family="'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace" font-size="12.0">morphx-agent</tspan></text>
+<text x="440" y="142" font-size="11.5" fill="#8f8f8f" text-anchor="end"><tspan>python process 1</tspan></text>
+<line x1="56" y1="152" x2="440" y2="152" stroke="#222222"/>
+<rect x="656" y="112" width="432" height="544" rx="14" fill="#0b0b0b" stroke="#2c2c2c" stroke-width="1.2"/>
+<text x="680" y="142" font-size="12" fill="#ffffff" text-anchor="start" letter-spacing="2.4"><tspan font-weight="700">SERVER</tspan></text>
+<text x="755.04" y="142" font-size="12.5" fill="#e8e8e8" text-anchor="start"><tspan font-family="'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace" font-size="12.0">morphx-server</tspan></text>
+<text x="1064" y="142" font-size="11.5" fill="#8f8f8f" text-anchor="end"><tspan>python process 2 · FastAPI + uvicorn</tspan></text>
+<line x1="680" y1="152" x2="1064" y2="152" stroke="#222222"/>
+<rect x="56" y="164" width="384" height="40" rx="10" fill="#0f0f0f" stroke="#3b3b3b" stroke-width="1.2"/>
+<text x="72" y="189" font-size="13" fill="#e8e8e8" text-anchor="start"><tspan font-weight="700">status endpoint</tspan><tspan font-family="'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace" font-size="12.5" dx="12.6">:8001/status</tspan></text>
+<text x="424" y="189" font-size="11.5" fill="#8f8f8f" text-anchor="end"><tspan>read-only JSON</tspan></text>
+<rect x="56" y="232" width="384" height="108" rx="10" fill="#0f0f0f" stroke="#3b3b3b" stroke-width="1.2"/>
+<circle cx="82" cy="256" r="10" fill="#ffffff"/>
+<text x="82" y="260" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:#000000">1</text>
+<text x="102" y="261" font-size="14" fill="#ffffff" text-anchor="start"><tspan font-weight="700">Acquisition loop</tspan></text>
+<text x="250.88" y="261" font-size="11.5" fill="#8f8f8f" text-anchor="start"><tspan>main thread</tspan></text>
+<text x="72" y="286" font-size="12.5" fill="#cfcfcf" text-anchor="start"><tspan>every </tspan><tspan font-family="'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace" font-size="12.0">--interval</tspan><tspan> seconds, default 5</tspan></text>
+<text x="72" y="305" font-size="12.5" fill="#cfcfcf" text-anchor="start"><tspan>makes event_id, sample_id and the 3 values once</tspan></text>
+<text x="72" y="324" font-size="12.5" fill="#8f8f8f" text-anchor="start"><tspan>never touches the network</tspan></text>
+<g transform="translate(396,244)" fill="none" stroke="#b5b5b5" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12h5l2.5-8 4 16 3-10 2 2h5.5"/></g>
+<rect x="56" y="376" width="384" height="108" rx="10" fill="#131313" stroke="#9a9a9a" stroke-width="1.4"/>
+<circle cx="82" cy="400" r="10" fill="#ffffff"/>
+<text x="82" y="404" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:#000000">2</text>
+<text x="102" y="405" font-size="14" fill="#ffffff" text-anchor="start"><tspan font-weight="700">Outbox</tspan></text>
+<text x="164.07999999999998" y="405" font-size="11.5" fill="#8f8f8f" text-anchor="start"><tspan>SQLite · WAL · fsync</tspan></text>
+<text x="72" y="430" font-size="12.5" fill="#cfcfcf" text-anchor="start"><tspan font-family="'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace" font-size="12.0">sequence</tspan><tspan> assigned by AUTOINCREMENT</tspan></text>
+<text x="72" y="449" font-size="12.5" fill="#cfcfcf" text-anchor="start"><tspan>status: </tspan><tspan font-family="'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace" font-size="12.0">pending</tspan><tspan> → </tspan><tspan font-family="'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace" font-size="12.0">synced</tspan><tspan> | </tspan><tspan font-family="'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace" font-size="12.0">rejected</tspan></text>
+<text x="72" y="468" font-size="12.5" fill="#8f8f8f" text-anchor="start"><tspan>survives kill -9, a crash and a power cut</tspan></text>
+<g transform="translate(396,388)" fill="none" stroke="#b5b5b5" stroke-width="1.5" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3.5"/><path d="M3 5v14c0 2 4 3.5 9 3.5s9-1.5 9-3.500V5"/><path d="M3 12c0 2 4 3.5 9 3.500s9-1.5 9-3.5"/></g>
+<rect x="56" y="520" width="384" height="108" rx="10" fill="#0f0f0f" stroke="#3b3b3b" stroke-width="1.2"/>
+<circle cx="82" cy="544" r="10" fill="#ffffff"/>
+<text x="82" y="548" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:#000000">3</text>
+<text x="102" y="549" font-size="14" fill="#ffffff" text-anchor="start"><tspan font-weight="700">Sync loop</tspan></text>
+<text x="190.12" y="549" font-size="11.5" fill="#8f8f8f" text-anchor="start"><tspan>background thread</tspan></text>
+<text x="72" y="574" font-size="12.5" fill="#cfcfcf" text-anchor="start"><tspan>POST the oldest pending record</tspan></text>
+<text x="72" y="593" font-size="12.5" fill="#cfcfcf" text-anchor="start"><tspan>200 / 201 → mark synced, send the next at once</tspan></text>
+<text x="72" y="612" font-size="12.5" fill="#cfcfcf" text-anchor="start"><tspan>error, timeout, 5xx → keep it, back off 1 to 30 s</tspan></text>
+<g transform="translate(396,532)" fill="none" stroke="#b5b5b5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9a8.5 8.5 0 0 0-15-2"/><path d="M5 2.500V7h4.5"/><path d="M4 15a8.5 8.5 0 0 0 15 2"/><path d="M19 21.500V17h-4.5"/></g>
+<rect x="680" y="164" width="384" height="40" rx="10" fill="#0f0f0f" stroke="#3b3b3b" stroke-width="1.2"/>
+<text x="696" y="189" font-size="13" fill="#e8e8e8" text-anchor="start"><tspan font-weight="700">dashboard</tspan><tspan font-family="'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace" font-size="12.5" dx="12.6">GET /  and  /ui/*</tspan></text>
+<text x="1048" y="189" font-size="11.5" fill="#8f8f8f" text-anchor="end"><tspan>static HTML, CSS, JS</tspan></text>
+<rect x="680" y="232" width="384" height="108" rx="10" fill="#0f0f0f" stroke="#3b3b3b" stroke-width="1.2"/>
+<text x="696" y="261" font-size="14" fill="#ffffff" text-anchor="start"><tspan font-weight="700">Read API</tspan></text>
+<text x="775.44" y="261" font-size="11.5" fill="#8f8f8f" text-anchor="start"><tspan>JSON</tspan></text>
+<text x="696" y="286" font-size="12.5" fill="#cfcfcf" text-anchor="start"><tspan font-family="'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace" font-size="12.0">GET /v1/devices/{id}/records</tspan></text>
+<text x="696" y="305" font-size="12.5" fill="#cfcfcf" text-anchor="start"><tspan>in acquisition order (by sequence), paged</tspan></text>
+<text x="696" y="324" font-size="12.5" fill="#cfcfcf" text-anchor="start"><tspan font-family="'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace" font-size="12.0">GET /v1/devices · /v1/recent · /v1/info</tspan></text>
+<g transform="translate(1020,244)" fill="none" stroke="#b5b5b5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4C5 4 5 6 5 8s0 3-3 4c3 1 3 2 3 4s0 4 3 4"/><path d="M16 4c3 0 3 2 3 4s0 3 3 4c-3 1-3 2-3 4s0 4-3 4"/></g>
+<rect x="680" y="376" width="384" height="108" rx="10" fill="#131313" stroke="#9a9a9a" stroke-width="1.4"/>
+<circle cx="706" cy="400" r="10" fill="#ffffff"/>
+<text x="706" y="404" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:#000000">6</text>
+<text x="726" y="405" font-size="14" fill="#ffffff" text-anchor="start"><tspan font-weight="700">Storage</tspan></text>
+<text x="796.76" y="405" font-size="11.5" fill="#8f8f8f" text-anchor="start"><tspan>SQLite · WAL · fsync</tspan></text>
+<text x="696" y="430" font-size="12.5" fill="#cfcfcf" text-anchor="start"><tspan font-family="'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace" font-size="12.0">UNIQUE (event_id)</tspan><tspan> → a retry changes nothing</tspan></text>
+<text x="696" y="449" font-size="12.5" fill="#cfcfcf" text-anchor="start"><tspan font-family="'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace" font-size="12.0">UNIQUE (device_id, sequence)</tspan><tspan> → no clashes</tspan></text>
+<text x="696" y="468" font-size="12.5" fill="#8f8f8f" text-anchor="start"><tspan>received_at is set once, by the server</tspan></text>
+<g transform="translate(1020,388)" fill="none" stroke="#b5b5b5" stroke-width="1.5" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3.5"/><path d="M3 5v14c0 2 4 3.5 9 3.5s9-1.5 9-3.500V5"/><path d="M3 12c0 2 4 3.5 9 3.500s9-1.5 9-3.5"/></g>
+<rect x="680" y="520" width="384" height="108" rx="10" fill="#0f0f0f" stroke="#3b3b3b" stroke-width="1.2"/>
+<circle cx="706" cy="544" r="10" fill="#ffffff"/>
+<text x="706" y="548" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:#000000">5</text>
+<text x="726" y="549" font-size="14" fill="#ffffff" text-anchor="start"><tspan font-weight="700">Ingest</tspan></text>
+<text x="788.08" y="549" font-size="11.5" fill="#8f8f8f" text-anchor="start"><tspan>POST /v1/records</tspan></text>
+<text x="696" y="574" font-size="12.5" fill="#cfcfcf" text-anchor="start"><tspan>validate: units, UTC time, ids, number types</tspan></text>
+<text x="696" y="593" font-size="12.5" fill="#cfcfcf" text-anchor="start"><tspan font-family="'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace" font-size="12.0">INSERT … ON CONFLICT (event_id) DO NOTHING</tspan></text>
+<text x="696" y="612" font-size="12.5" fill="#cfcfcf" text-anchor="start"><tspan>answers 201, 200 duplicate, 409, 422 (503 in demo)</tspan></text>
+<g transform="translate(1020,532)" fill="none" stroke="#b5b5b5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.500l8 3v6c0 5-3.5 8.5-8 10.5-4.5-2-8-5.5-8-10.500v-6z"/><path d="M8.5 12.500l2.5 2.5 4.5-5"/></g>
+<path d="M248 340 V373" fill="none" stroke="#8f8f8f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m)"/>
+<text x="258" y="364" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>INSERT, one atomic statement</tspan></text>
+<path d="M140 484 V517" fill="none" stroke="#8f8f8f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m)"/>
+<text x="150" y="508" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>oldest pending</tspan></text>
+<path d="M380 520 V487" fill="none" stroke="#bdbdbd" stroke-width="1.6" stroke-dasharray="5 4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#d)"/>
+<text x="366" y="508" font-size="11" fill="#8f8f8f" text-anchor="end"><tspan>mark synced</tspan></text>
+<circle cx="380" cy="502" r="9" fill="#ffffff"/>
+<text x="380" y="506" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:#000000">8</text>
+<path d="M872 520 V487" fill="none" stroke="#8f8f8f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m)"/>
+<text x="884" y="508" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>insert, commit, then reply</tspan></text>
+<path d="M872 376 V343" fill="none" stroke="#8f8f8f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m)"/>
+<text x="884" y="364" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>SELECT … ORDER BY sequence</tspan></text>
+<path d="M440 560 H672" fill="none" stroke="#ffffff" stroke-opacity=".16" stroke-width="7" stroke-linecap="round"/>
+<path d="M440 560 H678" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" marker-end="url(#w)"/>
+<path d="M680 596 H442" fill="none" stroke="#bdbdbd" stroke-width="1.8" stroke-dasharray="6 4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#d)"/>
+<circle cx="486" cy="560" r="10" fill="#ffffff"/>
+<text x="486" y="564" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:#000000">4</text>
+<text x="506" y="550" font-size="11.5" fill="#e8e8e8" text-anchor="start"><tspan font-family="'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace" font-size="11.0">POST /v1/records</tspan></text>
+<circle cx="486" cy="596" r="10" fill="#ffffff"/>
+<text x="486" y="600" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:#000000">7</text>
+<text x="476" y="618" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>201 · 200 · 409 · 422 · 503</tspan></text>
+<text x="560" y="506" font-size="11" fill="#8f8f8f" text-anchor="middle"><tspan>HTTP · JSON</tspan></text>
+<line x1="500" y1="512" x2="620" y2="512" stroke="#262626"/>
+<path d="M504 96 L504.0 174.0 Q504 184 494.0 184.0 L441 184" fill="none" stroke="#8f8f8f" stroke-width="1.6" stroke-dasharray="2 4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m)"/>
+<path d="M616 96 L616.0 174.0 Q616 184 626.0 184.0 L679 184" fill="none" stroke="#8f8f8f" stroke-width="1.6" stroke-dasharray="2 4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m)"/>
+<path d="M560 96 L560.0 276.0 Q560 286 570.0 286.0 L679 286" fill="none" stroke="#8f8f8f" stroke-width="1.6" stroke-dasharray="2 4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m)"/>
+<text x="496" y="176" font-size="11" fill="#8f8f8f" text-anchor="end"><tspan>GET /status</tspan></text>
+<text x="624" y="176" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>GET page</tspan></text>
+<text x="552" y="276" font-size="11" fill="#8f8f8f" text-anchor="end"><tspan>GET /v1/*</tspan></text>
+<text x="32" y="694" font-size="11.5" fill="#8f8f8f" text-anchor="start" letter-spacing="2"><tspan font-weight="700">THE PATH OF ONE RECORD</tspan></text>
+<rect x="35.0" y="708" width="126" height="74" rx="9" fill="#0e0e0e" stroke="#303030" stroke-width="1.2"/>
+<circle cx="53.0" cy="728" r="9" fill="#ffffff"/>
+<text x="53.0" y="732" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:#000000">1</text>
+<text x="69.0" y="733" font-size="12.5" fill="#ffffff" text-anchor="start"><tspan font-weight="700">Measure</tspan></text>
+<text x="47.0" y="754" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>ids and values</tspan></text>
+<text x="47.0" y="769" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>made once only</tspan></text>
+<path d="M162.0 745 h4" stroke="#555555" stroke-width="1.4" stroke-linecap="round"/>
+<rect x="167.0" y="708" width="126" height="74" rx="9" fill="#0e0e0e" stroke="#303030" stroke-width="1.2"/>
+<circle cx="185.0" cy="728" r="9" fill="#ffffff"/>
+<text x="185.0" y="732" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:#000000">2</text>
+<text x="201.0" y="733" font-size="12.5" fill="#ffffff" text-anchor="start"><tspan font-weight="700">Save</tspan></text>
+<text x="179.0" y="754" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>INSERT in outbox,</tspan></text>
+<text x="179.0" y="769" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>sequence assigned</tspan></text>
+<path d="M294.0 745 h4" stroke="#555555" stroke-width="1.4" stroke-linecap="round"/>
+<rect x="299.0" y="708" width="126" height="74" rx="9" fill="#0e0e0e" stroke="#303030" stroke-width="1.2"/>
+<circle cx="317.0" cy="728" r="9" fill="#ffffff"/>
+<text x="317.0" y="732" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:#000000">3</text>
+<text x="333.0" y="733" font-size="12.5" fill="#ffffff" text-anchor="start"><tspan font-weight="700">Pick</tspan></text>
+<text x="311.0" y="754" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>oldest pending</tspan></text>
+<text x="311.0" y="769" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>record first</tspan></text>
+<path d="M426.0 745 h4" stroke="#555555" stroke-width="1.4" stroke-linecap="round"/>
+<rect x="431.0" y="708" width="126" height="74" rx="9" fill="#0e0e0e" stroke="#303030" stroke-width="1.2"/>
+<circle cx="449.0" cy="728" r="9" fill="#ffffff"/>
+<text x="449.0" y="732" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:#000000">4</text>
+<text x="465.0" y="733" font-size="12.5" fill="#ffffff" text-anchor="start"><tspan font-weight="700">Upload</tspan></text>
+<text x="443.0" y="754" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>POST /v1/records,</tspan></text>
+<text x="443.0" y="769" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>one JSON record</tspan></text>
+<path d="M558.0 745 h4" stroke="#555555" stroke-width="1.4" stroke-linecap="round"/>
+<rect x="563.0" y="708" width="126" height="74" rx="9" fill="#0e0e0e" stroke="#303030" stroke-width="1.2"/>
+<circle cx="581.0" cy="728" r="9" fill="#ffffff"/>
+<text x="581.0" y="732" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:#000000">5</text>
+<text x="597.0" y="733" font-size="12.5" fill="#ffffff" text-anchor="start"><tspan font-weight="700">Validate</tspan></text>
+<text x="575.0" y="754" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>units, UTC time,</tspan></text>
+<text x="575.0" y="769" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>ids, number types</tspan></text>
+<path d="M690.0 745 h4" stroke="#555555" stroke-width="1.4" stroke-linecap="round"/>
+<rect x="695.0" y="708" width="126" height="74" rx="9" fill="#0e0e0e" stroke="#303030" stroke-width="1.2"/>
+<circle cx="713.0" cy="728" r="9" fill="#ffffff"/>
+<text x="713.0" y="732" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:#000000">6</text>
+<text x="729.0" y="733" font-size="12.5" fill="#ffffff" text-anchor="start"><tspan font-weight="700">Commit</tspan></text>
+<text x="707.0" y="754" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>insert once, then</tspan></text>
+<text x="707.0" y="769" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>fsync to disk</tspan></text>
+<path d="M822.0 745 h4" stroke="#555555" stroke-width="1.4" stroke-linecap="round"/>
+<rect x="827.0" y="708" width="126" height="74" rx="9" fill="#0e0e0e" stroke="#303030" stroke-width="1.2"/>
+<circle cx="845.0" cy="728" r="9" fill="#ffffff"/>
+<text x="845.0" y="732" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:#000000">7</text>
+<text x="861.0" y="733" font-size="12.5" fill="#ffffff" text-anchor="start"><tspan font-weight="700">Reply</tspan></text>
+<text x="839.0" y="754" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>201 created or</tspan></text>
+<text x="839.0" y="769" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>200 duplicate</tspan></text>
+<path d="M954.0 745 h4" stroke="#555555" stroke-width="1.4" stroke-linecap="round"/>
+<rect x="959.0" y="708" width="126" height="74" rx="9" fill="#0e0e0e" stroke="#303030" stroke-width="1.2"/>
+<circle cx="977.0" cy="728" r="9" fill="#ffffff"/>
+<text x="977.0" y="732" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:#000000">8</text>
+<text x="993.0" y="733" font-size="12.5" fill="#ffffff" text-anchor="start"><tspan font-weight="700">Mark</tspan></text>
+<text x="971.0" y="754" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>the outbox row</tspan></text>
+<text x="971.0" y="769" font-size="11" fill="#8f8f8f" text-anchor="start"><tspan>becomes synced</tspan></text>
+</svg>

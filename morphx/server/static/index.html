@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en" data-theme="mono">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>morphx // ops console</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23050806'/%3E%3Cpath d='M7 9l8 7-8 7' fill='none' stroke='%23ffffff' stroke-width='3'/%3E%3Crect x='17' y='21' width='9' height='3' fill='%23ffffff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/ui/style.css">
+</head>
+<body class="fx">
+
+  <div id="boot" hidden><pre id="boot-text"></pre><p class="dim">press any key to skip</p></div>
+
+  <header class="topbar">
+    <div class="brand glow"><span class="dim">morphx@neuranics</span><span class="dim">:</span><span class="path">~/ops</span><span class="dim">$</span> <span id="typed">console</span><span class="cursor">▌</span></div>
+    <div class="chips">
+      <span class="chip" id="chip-link"><i class="dot"></i><span>CONNECTING</span></span>
+      <span class="chip" id="chip-clock" title="server time (UTC)">--:--:-- UTC</span>
+      <span class="chip" id="chip-uptime" title="server uptime">up —</span>
+      <span class="chip hide-sm" id="chip-demo" hidden>DEMO MODE</span>
+    </div>
+    <div class="tools">
+      <button id="btn-pause" title="pause live updates (p)">❚❚ pause</button>
+      <button id="btn-theme" title="cycle colour theme (t)">◐ theme</button>
+      <button id="btn-fx" title="toggle CRT effect (c)">▤ crt</button>
+      <button id="btn-help" title="keyboard shortcuts (?)">? help</button>
+    </div>
+  </header>
+
+  <div id="banner" class="banner" hidden></div>
+
+  <main class="layout">
+    <aside class="side">
+
+      <section class="panel" id="p-devices">
+        <h2 class="title">devices</h2>
+        <div id="devices" class="devices"></div>
+        <p class="hint" id="devices-empty" hidden>no device has reported yet.<br>start one:<br><code>morphx-agent --interval 1 --status-port 8001</code></p>
+      </section>
+
+      <section class="panel" id="p-agents">
+        <h2 class="title">device agents</h2>
+        <div id="agents" class="agents"></div>
+        <form id="agent-form" class="agent-form" autocomplete="off">
+          <label for="agent-urls" class="dim">status urls (blank = auto-detect)</label>
+          <div class="row"><input id="agent-urls" spellcheck="false" placeholder="auto (127.0.0.1:8001–8004)"><button type="submit">apply</button></div>
+        </form>
+      </section>
+
+      <section class="panel" id="p-outage">
+        <h2 class="title">outage simulator</h2>
+        <div id="outage"></div>
+      </section>
+
+      <section class="panel" id="p-probe">
+        <h2 class="title">protocol probes</h2>
+        <p class="hint">send a crafted upload to the real endpoint and watch what the server does.</p>
+        <div class="btnrow">
+          <button data-probe="dup" title="re-send the newest record unchanged">↺ replay</button>
+          <button data-probe="conflict" title="new event_id, same device + sequence">⚔ conflict</button>
+          <button data-probe="invalid" title="wrong unit g/L">✗ bad unit</button>
+        </div>
+        <pre id="probe-out" class="console">$ waiting for a probe…</pre>
+      </section>
+
+    </aside>
+
+    <section class="main">
+
+      <div class="kpis" id="kpis"></div>
+
+      <div class="charts">
+        <section class="panel chart" data-metric="wbc"><h2 class="title">wbc</h2><div class="readout"><b id="v-wbc">—</b><small>×10³/µL</small><span class="flag" id="f-wbc"></span></div><canvas id="c-wbc"></canvas></section>
+        <section class="panel chart" data-metric="rbc"><h2 class="title">rbc</h2><div class="readout"><b id="v-rbc">—</b><small>×10⁶/µL</small><span class="flag" id="f-rbc"></span></div><canvas id="c-rbc"></canvas></section>
+        <section class="panel chart" data-metric="hb"><h2 class="title">haemoglobin</h2><div class="readout"><b id="v-hb">—</b><small>g/dL</small><span class="flag" id="f-hb"></span></div><canvas id="c-hb"></canvas></section>
+      </div>
+
+      <div class="row2">
+        <section class="panel">
+          <h2 class="title">sync lag · measured → received</h2>
+          <p class="hint tight">each bar is one record in <b>arrival</b> order. tall bars are records that waited in the device's outbox. watch the staircase after an outage.</p>
+          <canvas id="c-lag" class="lag"></canvas>
+        </section>
+        <section class="panel">
+          <h2 class="title">ingest since server start</h2>
+          <div id="ingest" class="ingest"></div>
+        </section>
+      </div>
+
+      <div class="row3">
+        <section class="panel table-panel">
+          <h2 class="title">records</h2>
+          <div class="tabletools">
+            <button id="btn-order" title="switch order (o)">order: <b>sequence</b></button>
+            <input id="filter" placeholder="filter seq / sample / event… ( / )" spellcheck="false">
+            <span class="dim" id="table-count"></span>
+          </div>
+          <div class="tablewrap"><table id="records"><thead><tr>
+            <th title="order the server received it">arr</th><th title="per-device acquisition order">seq</th>
+            <th>measured (utc)</th><th>received</th><th title="received − measured">lag</th>
+            <th>sample</th><th class="r">wbc</th><th class="r">rbc</th><th class="r">hb</th><th>flags</th>
+          </tr></thead><tbody></tbody></table></div>
+        </section>
+        <section class="panel">
+          <h2 class="title">live log</h2>
+          <div id="log" class="log" aria-live="polite"></div>
+        </section>
+      </div>
+
+    </section>
+  </main>
+
+  <aside id="drawer" class="drawer" hidden aria-label="record detail">
+    <header><h3 id="drawer-title">record</h3><div><button id="drawer-copy">copy json</button><button id="drawer-replay">↺ replay</button><button id="drawer-close" aria-label="close">✕</button></div></header>
+    <div id="drawer-body"></div>
+  </aside>
+
+  <div id="help" class="help" hidden>
+    <div class="panel"><h2 class="title">keyboard</h2>
+      <dl>
+        <dt>j / k</dt><dd>move through records</dd>
+        <dt>enter</dt><dd>open record detail</dd>
+        <dt>esc</dt><dd>close detail / help</dd>
+        <dt>o</dt><dd>order by sequence ⇄ arrival</dd>
+        <dt>/</dt><dd>filter records</dd>
+        <dt>[ / ]</dt><dd>previous / next device</dd>
+        <dt>p</dt><dd>pause / resume live updates</dd>
+        <dt>t</dt><dd>cycle theme</dd>
+        <dt>c</dt><dd>toggle CRT effect</dd>
+        <dt>?</dt><dd>this help</dd>
+      </dl>
+      <h2 class="sub">legend</h2>
+      <ul>
+        <li><span class="tag late">LATE</span> arrived after a record with a higher sequence</li>
+        <li><span class="tag backlog">BACKLOG</span> waited more than 3 s in the device outbox</li>
+        <li><span class="tag abn">H / L</span> outside the synthetic reference range</li>
+        <li><span class="gap">⋯ missing 41–47</span> sequences not (yet) received</li>
+      </ul>
+      <p class="dim">reference ranges: wbc 4–11 · rbc 4.2–6.1 · hb 12–17.5 (synthetic data, display only)</p>
+    </div>
+  </div>
+
+  <div id="toasts" class="toasts"></div>
+  <script src="/ui/app.js" defer></script>
+</body>
+</html>
